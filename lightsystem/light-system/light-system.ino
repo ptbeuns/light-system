@@ -1,13 +1,14 @@
-#include <Adafruit_NeoPixel.h>
-#ifdef __AVR__
-#include <avr/power.h> // Required for 16 MHz Adafruit Trinket
-#endif
+// Wire Master Writer
+// by Nicholas Zambetti <http://www.zambetti.com>
 
-#define PIN 13 // On Trinket or Gemma, suggest changing this to 1
+// Demonstrates use of the Wire library
+// Writes data to an I2C/TWI slave device
+// Refer to the "Wire Slave Receiver" example for use with this
 
-#define NUMPIXELS 40 // Popular NeoPixel ring size
+// Created 29 March 2006
 
-Adafruit_NeoPixel pixels(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
+// This example code is in the public domain.
+
 
 #include <Wire.h>
 
@@ -24,61 +25,12 @@ void setup()
   pixels.Start();
 }
 
-void loop()
-{
-  delay(100);
-}
+byte x = 0;
 
-void LightsSystem()
-{
-  while (Wire.available())
-  {
-    c = Wire.read();
-    busy += c;
-  }
-  cijfer = busy.toInt();
-  Serial.println(cijfer);
+void loop() {
+  Wire.beginTransmission(8); // transmit to device #8
+  Wire.write("20");              // sends one byte
+  Wire.endTransmission();    // stop transmitting
 
-  if (cijfer != prevCijfer)
-  {
-    if (cijfer < 30)
-    {
-      for (int i = 0; i < NUMPIXELS; i++)
-      { // For each pixel...
-
-        // pixels.Color() takes RGB values, from 0,0,0 up to 255,255,255
-        // Here we're using a moderately bright green color:
-        pixels.setPixelColor(i, pixels.Color(0, 255, 0));
-
-        pixels.show(); // Send the updated pixel colors to the hardware.
-      }
-    }
-    else if (cijfer > 30 && cijfer < 70)
-    {
-      for (int i = 0; i < NUMPIXELS; i++)
-      { // For each pixel...
-
-        // pixels.Color() takes RGB values, from 0,0,0 up to 255,255,255
-        // Here we're using a moderately bright green color:
-        pixels.setPixelColor(i, pixels.Color(255, 165, 0));
-
-        pixels.show(); // Send the updated pixel colors to the hardware.
-      }
-    }
-    else if (cijfer < 100)
-    {
-      for (int i = 0; i < NUMPIXELS; i++)
-      { // For each pixel...
-
-        // pixels.Color() takes RGB values, from 0,0,0 up to 255,255,255
-        // Here we're using a moderately bright green color:
-        pixels.setPixelColor(i, pixels.Color(255, 0, 0));
-
-        pixels.show(); // Send the updated pixel colors to the hardware.
-      }
-    }
-  }
   delay(500);
-  prevCijfer = cijfer;
-  busy = "";
 }
