@@ -20,6 +20,8 @@ void setup()
 {
   Wire.begin(8);
   Wire.onReceive(LightsSystem);
+  Serial.begin(9600)
+  pixels.Start();
 }
 
 void loop()
